@@ -63,6 +63,9 @@ cp ./i3-gaps/config $HOME/.config/i3/config
 echo "i3-gaps config update: OK."
 
 # reloading things
-#i3-msg restart
+i3-msg restart
 echo "i3-gaps restart: OK."
+
+# end info
+
 
