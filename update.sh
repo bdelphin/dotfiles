@@ -5,7 +5,7 @@
 
 # backup existing config files
 # i3-gaps :
-cp $HOME/.config/i3/config $HOME/.config/i3/config.bak-update
+cp $HOME/.config/i3/config $HOME/backups/i3-gaps/config.bak-update
 
 # copying new config
 cp ./i3-gaps/config $HOME/.config/i3/config

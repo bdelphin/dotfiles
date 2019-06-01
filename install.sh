@@ -35,7 +35,8 @@ then
     exit
 fi
 
-
+# prerequisites ###############################################################
+printf "═══ Prerequisites ═══════════════════════════════════════════════════════\n"
 # scan prerequisites.txt for packages needed
 packagelist=""
 while read package; do
@@ -49,23 +50,111 @@ while read package; do
 	fi
 done <./prerequisites.txt
 
-# install prerequisites
-echo "pacman -S $packagelist"
+# install prerequisites #######################################################
+if [ "$packagelist" = "" ]; then
+	echo -e "Prerequisites install: \e[38;5;82mOK. \e[0m(nothing to install)"
+else
+	sudo pacman -S --noconfirm $packagelist
+	if [ $? -eq 0 ]; then
+		echo -e "Prerequisites install: \e[38;5;82mOK.\e[0m"
+	else
+		echo -e "Prerequisites install: \e[38;5;196mFAIL.\e[0m"
+	fi
+fi
+printf "\n\n"
+sleep 1
 
+# Backup ######################################################################
+printf "═══ Backup ══════════════════════════════════════════════════════════════\n"
+# backup existing config files ################################################
+mkdir -p ./backups
+mkdir -p ./backups/i3-gaps
+mkdir -p ./backups/polybar
+mkdir -p ./backups/system
+mkdir -p ./backups/dunst
 
-# backup existing config files
 # i3-gaps :
-cp $HOME/.config/i3/config $HOME/.config/i3/config.bak-$(date -Iseconds)
-echo "i3-gaps config backup: OK."
+cp $HOME/.config/i3/config ./backups/i3-gaps/config.bak-$(date -Iseconds)
+if [ $? -eq 0 ]; then
+	echo -e "i3-gaps config backup: \e[38;5;82mOK.\e[0m"
+else
+	echo -e "i3-gaps config backup: \e[38;5;196mFAIL.\e[0m"
+fi
+# polybar : 
+cp $HOME/.config/polybar/config ./backups/polybar/config.bak-$(date -Iseconds)
+if [ $? -eq 0 ]; then
+	echo -e "polybar config backup: \e[38;5;82mOK.\e[0m"
+else
+	echo -e "polybar config backup: \e[38;5;196mFAIL.\e[0m"
+fi
+# Xresources
+cp $HOME/.Xresources ./backups/system/.Xresources.bak-$(date -Iseconds)
+if [ $? -eq 0 ]; then
+	echo -e ".Xresources config backup: \e[38;5;82mOK.\e[0m"
+else
+	echo -e ".Xresources config backup: \e[38;5;196mFAIL.\e[0m"
+fi
+# dunst
+cp $HOME/.config/dunst/dunstrc ./backups/dunst/dunstrc.bak-$(date -Iseconds)
+if [ $? -eq 0 ]; then
+	echo -e "Dunst config backup: \e[38;5;82mOK. \e[0m"
+else
+	echo -e "Dunst config backup: \e[38;5;196mFAIL. \e[0m"
+fi
 
-# copying new config
+printf "\n\n"
+sleep 1
+
+# copying new config ##########################################################
+printf "═══ Copying new config files ════════════════════════════════════════════\n"
 cp ./i3-gaps/config $HOME/.config/i3/config
-echo "i3-gaps config update: OK."
+if [ $? -eq 0 ]; then
+	echo -e "i3-gaps config update: \e[38;5;82mOK.\e[0m"
+else
+	echo -e "i3-gaps config update: \e[38;5;196mFAIL.\e[0m"
+fi
+cp -R ./polybar/* $HOME/.config/polybar/
+if [ $? -eq 0 ]; then
+	echo -e "polybar config update: \e[38;5;82mOK.\e[0m"
+else
+	echo -e "polybar config update: \e[38;5;196mFAIL.\e[0m"
+fi
+cp -R ./dunst/* $HOME/.config/dunst/
+if [ $? -eq 0 ]; then
+	echo -e "dunst config update: \e[38;5;82mOK.\e[0m"
+else
+	echo -e "dunst config update: \e[38;5;196mFAIL.\e[0m"
+fi
 
-# reloading things
+printf "\n\n"
+sleep 1
+
+# setting up wallpaper & colorscheme ##########################################
+printf "═══ Wallpaper & Colorscheme ═════════════════════════════════════════════\n"
+betterlockscreen -u ./Wallpapers/wallhaven-n6lqow.jpg
+wal -i ./Wallpapers/wallhaven-n6lqow.jpg -a 90 > ./pywal.log
+$HOME/.config/dunst/wal_dunst.sh 2>&1 > /dev/null
+if [ $? -eq 0 ]; then
+	echo -e "Pywal setup: \e[38;5;82mOK.\e[0m"
+else
+	echo -e "Pywal setup: \e[38;5;196mFAIL.\e[0m"
+fi
+
+# restart i3 ##################################################################
+echo "i3-gaps will restart in 5 seconds."
+
+secs=5
+while [ $secs -gt 0 ]; do
+	echo -ne "$secs\033[O\r"
+	sleep 1
+	: $((secs--))
+done
+
 i3-msg restart
-echo "i3-gaps restart: OK."
 
-# end info
+printf "\n\n"
+
+notify-send "Welcome on board !" "Auto-ricing script is complete." -u normal
+echo "Everything has been set up. Thanks for using BDELPHIN's auto-rice script."
 
 
