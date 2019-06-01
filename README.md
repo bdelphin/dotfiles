@@ -14,12 +14,9 @@ I will update this repo slowly, I'm currently quite busy.
 
 ## added:
 - i3-gaps vindow manager config file. see in i3-gaps folder.
-- install script
+- install / update / rollback / restore scripts.
 
 ## coming soon:
-- update script
-- rollback script
-- restore script
 - more config files
 
 ## Install / How to use
@@ -40,9 +37,9 @@ This install script is designed ONLY for Arch Linux based systems, using pacman 
 If you intend to use it, lets say, on a Debian system, you should replace all pacman related stuff with apt-get commands. 
 Maybe I'll make it work for Debian based systems some day.
 
-## Daily use / Tweak it ! / Update script (coming soon)
+## Daily use / Tweak it ! / Update script
 
-You can directly edit dotfiles in their respective locations if you don't intend to use my scrips anymore.
+You can directly edit dotfiles in their respective locations if you don't intend to use my scripts anymore.
 
 That being said, for editing config files and tweaking your system, I recommend that you edit files directly in the repo dotfiles directory. This will allow you to continue using my scripts for updating your config files, and deploying them on other machines.
 
@@ -50,20 +47,18 @@ Once you're done editing, you can test your modifications by launching:
 ```bash
 sudo ./update.sh
 ```
-! WARNING ! This script doesn't work like the install script. It will just create a .bak-update file of the previous config files, without the timestamp. This implies that everytime you lauch it, your previous .bak-update is replaced with the new one.
+! WARNING ! This script doesn't work like the install script. Nothing will be explained and it won't ask for confirmation. It will just create a .bak-update file of the previous config files, without the timestamp. This implies that everytime you lauch it, your previous .bak-update is replaced with the new one.
 This allow to rollback to your previous config:
 ```bash
 sudo ./rollback.sh
 ```
 The update script is intended to test minor modifications faster, and rollback fast as well if needed. If you're making huge changes in multiple files, it may be more appropriate to re-use install script for full backup.
 
-
 Last but not least, if you wish, you can restore any backed-up config file created with the install script by running:
 ```bash
 sudo ./restore.sh
 ```
+This script will open a menu where you'll have to choose which config to restore. Only working with i3 config file for now.
 
 ## Licence 
-coming soon as well.
-
-
+Under GNU GPLv3 Licence, see LICENCE file.
