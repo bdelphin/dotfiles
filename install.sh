@@ -151,6 +151,7 @@ if [ $? -eq 0 ]; then
 else
 	echo -e ".bashrc config update: \e[38;5;196mFAIL.\e[0m"
 fi
+mkdir -p $HOME/.config/dunst
 cp -R ./dunst/* $HOME/.config/dunst/
 if [ $? -eq 0 ]; then
 	echo -e "dunst config update: \e[38;5;82mOK.\e[0m"
