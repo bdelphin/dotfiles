@@ -94,6 +94,20 @@ if [ $? -eq 0 ]; then
 else
 	echo -e ".Xresources config backup: \e[38;5;196mFAIL.\e[0m"
 fi
+# xinitrc
+cp $HOME/.xinitrc ./backups/system/.xinitrc.bak-$(date -Iseconds)
+if [ $? -eq 0 ]; then
+	echo -e ".xinitrc config backup: \e[38;5;82mOK.\e[0m"
+else
+	echo -e ".xinitrc config backup: \e[38;5;196mFAIL.\e[0m"
+fi
+# bashrc
+cp $HOME/.bashrc ./backups/system/.bashrc.bak-$(date -Iseconds)
+if [ $? -eq 0 ]; then
+	echo -e ".bashrc config backup: \e[38;5;82mOK.\e[0m"
+else
+	echo -e ".bashrc config backup: \e[38;5;196mFAIL.\e[0m"
+fi
 # dunst
 cp $HOME/.config/dunst/dunstrc ./backups/dunst/dunstrc.bak-$(date -Iseconds)
 if [ $? -eq 0 ]; then
@@ -118,6 +132,24 @@ if [ $? -eq 0 ]; then
 	echo -e "polybar config update: \e[38;5;82mOK.\e[0m"
 else
 	echo -e "polybar config update: \e[38;5;196mFAIL.\e[0m"
+fi
+cp ./system/.Xresources $HOME/
+if [ $? -eq 0 ]; then
+	echo -e ".Xresources config update: \e[38;5;82mOK.\e[0m"
+else
+	echo -e ".Xresources config update: \e[38;5;196mFAIL.\e[0m"
+fi
+cp ./system/.xinitrc $HOME/
+if [ $? -eq 0 ]; then
+	echo -e ".xinitrc config update: \e[38;5;82mOK.\e[0m"
+else
+	echo -e ".xinitrc config update: \e[38;5;196mFAIL.\e[0m"
+fi
+cp ./system/.bashrc $HOME/
+if [ $? -eq 0 ]; then
+	echo -e ".bashrc config update: \e[38;5;82mOK.\e[0m"
+else
+	echo -e ".bashrc config update: \e[38;5;196mFAIL.\e[0m"
 fi
 cp -R ./dunst/* $HOME/.config/dunst/
 if [ $? -eq 0 ]; then
