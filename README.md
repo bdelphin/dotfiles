@@ -10,6 +10,9 @@ So I decided to automate the process with a nice script that will at least copy 
 
 I'm using i3-gaps Window Manager, Polybar, Rofi&Dmenu, URxvt, compton and Pywal.For now, not every config files has been uploaded, as I need to clean them up. You can see what have been uploaded in the section below.
 
+Here's the result :
+![screenshot](screenshot.png?raw=true "Screenshot")
+
 I will update this repo slowly, I'm currently quite busy.
 
 ## added:
