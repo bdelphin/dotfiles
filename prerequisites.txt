@@ -17,10 +17,6 @@ rofi
 rxvt-unicode
 scrot
 sed
-sudo
-surf
-tabbed
-thunar
 tree
 ttf-font-awesome
 tty-clock

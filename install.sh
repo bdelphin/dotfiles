@@ -24,8 +24,7 @@ printf "════════════════════════
 
 printf "Welcome to my auto-rice / desktop env. setup script !\n"
 printf "It's inspired by LARBS (Luke Auto Rice Bootstraping Script).\n\n"
-printf "USE AT YOUR OWN RISK ! This script will backup everything, but it has only \nbeen tested on few machines.\n\n"
-
+printf "USE AT YOUR OWN RISK ! This script will backup everything, but it has only \nbeen tested on few machines. Sudo is needed and will prompt for password.\n\n"
 
 read -p "Are you sure you want to continue (Y/n) ? " -r
 echo    # (optional) move to a new line
@@ -37,6 +36,9 @@ fi
 
 # prerequisites ###############################################################
 printf "═══ Prerequisites ═══════════════════════════════════════════════════════\n"
+# update pacman
+echo "Let's update the system first."
+sudo pacman -Syu --noconfirm --needed --logfile ./pacman_update.log
 # scan prerequisites.txt for packages needed
 packagelist=""
 while read package; do
@@ -74,48 +76,88 @@ mkdir -p ./backups/system
 mkdir -p ./backups/dunst
 
 # i3-gaps :
-cp $HOME/.config/i3/config ./backups/i3-gaps/config.bak-$(date -Iseconds)
-if [ $? -eq 0 ]; then
-	echo -e "i3-gaps config backup: \e[38;5;82mOK.\e[0m"
+if [ ! -f $HOME/.config/i3/config ]; then
+	echo "No i3 config to backup. Skipping."
 else
-	echo -e "i3-gaps config backup: \e[38;5;196mFAIL.\e[0m"
-fi
-# polybar : 
-cp $HOME/.config/polybar/config ./backups/polybar/config.bak-$(date -Iseconds)
-if [ $? -eq 0 ]; then
-	echo -e "polybar config backup: \e[38;5;82mOK.\e[0m"
-else
-	echo -e "polybar config backup: \e[38;5;196mFAIL.\e[0m"
-fi
-# Xresources
-cp $HOME/.Xresources ./backups/system/.Xresources.bak-$(date -Iseconds)
-if [ $? -eq 0 ]; then
-	echo -e ".Xresources config backup: \e[38;5;82mOK.\e[0m"
-else
-	echo -e ".Xresources config backup: \e[38;5;196mFAIL.\e[0m"
-fi
-# xinitrc
-cp $HOME/.xinitrc ./backups/system/.xinitrc.bak-$(date -Iseconds)
-if [ $? -eq 0 ]; then
-	echo -e ".xinitrc config backup: \e[38;5;82mOK.\e[0m"
-else
-	echo -e ".xinitrc config backup: \e[38;5;196mFAIL.\e[0m"
-fi
-# bashrc
-cp $HOME/.bashrc ./backups/system/.bashrc.bak-$(date -Iseconds)
-if [ $? -eq 0 ]; then
-	echo -e ".bashrc config backup: \e[38;5;82mOK.\e[0m"
-else
-	echo -e ".bashrc config backup: \e[38;5;196mFAIL.\e[0m"
-fi
-# dunst
-cp $HOME/.config/dunst/dunstrc ./backups/dunst/dunstrc.bak-$(date -Iseconds)
-if [ $? -eq 0 ]; then
-	echo -e "Dunst config backup: \e[38;5;82mOK. \e[0m"
-else
-	echo -e "Dunst config backup: \e[38;5;196mFAIL. \e[0m"
+	cp $HOME/.config/i3/config ./backups/i3-gaps/config.bak-$(date -Iseconds)
+	if [ $? -eq 0 ]; then
+		echo -e "i3-gaps config backup: \e[38;5;82mOK.\e[0m"
+	else
+		echo -e "i3-gaps config backup: \e[38;5;196mFAIL.\e[0m"
+	fi	
 fi
 
+# polybar : 
+if [ ! -f $HOME/.config/polybar/config ]; then
+	echo "No polybar config to backup. Skipping."
+else
+	cp $HOME/.config/polybar/config ./backups/polybar/config.bak-$(date -Iseconds)
+	if [ $? -eq 0 ]; then
+		echo -e "polybar config backup: \e[38;5;82mOK.\e[0m"
+	else
+		echo -e "polybar config backup: \e[38;5;196mFAIL.\e[0m"
+	fi
+fi
+
+# Xresources
+if [ ! -f $HOME/.Xresources ]; then
+	echo "No .Xresources file to backup. Skipping."
+else
+	cp $HOME/.Xresources ./backups/system/.Xresources.bak-$(date -Iseconds)
+	if [ $? -eq 0 ]; then
+		echo -e ".Xresources file backup: \e[38;5;82mOK.\e[0m"
+	else
+		echo -e ".Xresources file backup: \e[38;5;196mFAIL.\e[0m"
+	fi
+fi
+
+# xinitrc
+if [ ! -f $HOME/.xinitrc ]; then
+	echo "No .xinitrc file to backup. Skipping."
+else
+	cp $HOME/.xinitrc ./backups/system/.xinitrc.bak-$(date -Iseconds)
+	if [ $? -eq 0 ]; then
+		echo -e ".xinitrc config backup: \e[38;5;82mOK.\e[0m"
+	else
+		echo -e ".xinitrc config backup: \e[38;5;196mFAIL.\e[0m"
+	fi
+fi
+
+# bashrc
+if [ ! -f $HOME/.bashrc ]; then
+	echo "No .bashrc file to backup. Skipping."
+else
+	cp $HOME/.bashrc ./backups/system/.bashrc.bak-$(date -Iseconds)
+	if [ $? -eq 0 ]; then
+		echo -e ".bashrc file backup: \e[38;5;82mOK.\e[0m"
+	else	
+		echo -e ".bashrc file backup: \e[38;5;196mFAIL.\e[0m"
+	fi
+fi
+
+# bash_profile
+if [ ! -f $HOME/.bash_profile ]; then
+	echo "No .bash_profile file to backup. Skipping."
+else
+	cp $HOME/.bash_profile ./backups/system/.bash_profile.bak-$(date -Iseconds)
+	if [ $? -eq 0 ]; then
+		echo -e ".bash_profile file backup: \e[38;5;82mOK.\e[0m"
+	else	
+		echo -e ".bash_profile file backup: \e[38;5;196mFAIL.\e[0m"
+	fi
+fi
+
+# dunst
+if [ ! -f $HOME/.config/dunst/dunstrc ]; then
+	echo "No dunst config to backup. Skipping."
+else
+	cp $HOME/.config/dunst/dunstrc ./backups/dunst/dunstrc.bak-$(date -Iseconds)
+	if [ $? -eq 0 ]; then
+		echo -e "Dunst config backup: \e[38;5;82mOK. \e[0m"
+	else
+		echo -e "Dunst config backup: \e[38;5;196mFAIL. \e[0m"
+	fi
+fi	
 printf "\n\n"
 sleep 1
 
@@ -151,6 +193,12 @@ if [ $? -eq 0 ]; then
 else
 	echo -e ".bashrc config update: \e[38;5;196mFAIL.\e[0m"
 fi
+cp ./system/.bash_profile $HOME/
+if [ $? -eq 0 ]; then
+	echo -e ".bash_profile config update: \e[38;5;82mOK.\e[0m"
+else
+	echo -e ".bash_profile config update: \e[38;5;196mFAIL.\e[0m"
+fi
 mkdir -p $HOME/.config/dunst
 cp -R ./dunst/* $HOME/.config/dunst/
 if [ $? -eq 0 ]; then
@@ -174,20 +222,27 @@ else
 fi
 
 # restart i3 ##################################################################
-echo "i3-gaps will restart in 5 seconds."
-
-secs=5
-while [ $secs -gt 0 ]; do
-	echo -ne "$secs\033[O\r"
-	sleep 1
-	: $((secs--))
-done
-
-i3-msg restart
-
-printf "\n\n"
-
-notify-send "Welcome on board !" "Auto-ricing script is complete." -u normal
+# only if X detected, else inform to run startx.
+if [[ -t 0 && $(tty) =~ /dev/tty ]] && ! pgrep -u $USER startx &> /dev/null;then
+	echo "No X11 session detected, would you like to launch one ? [Y|n]"
+	read -n 1 start_x
+	if [[ $start_x == "n" ]];then
+		echo "X11 won't be launched."
+		echo "If you want to start one, just run startx."
+	else
+		startx 2>&1 $HOME/.startx.log
+	fi
+else
+	echo "i3-gaps will restart in 5 seconds."
+	secs=5
+	while [ $secs -gt 0 ]; do
+		echo -ne "$secs\033[O\r"
+		sleep 1
+		: $((secs--))
+	done
+	i3-msg restart	
+	printf "\n\n"notify-send "Welcome on board !" "Auto-ricing script is complete." -u normal
+fi
 echo "Everything has been set up. Thanks for using BDELPHIN's auto-rice script."
 
 
