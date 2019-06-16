@@ -37,8 +37,8 @@ fi
 # prerequisites ###############################################################
 printf "═══ Prerequisites ═══════════════════════════════════════════════════════\n"
 # update pacman
-echo "Let's update the system first."
-sudo pacman -Syu --noconfirm --needed --logfile ./pacman_update.log
+echo "Let's update pacman database first."
+sudo pacman -Sy --noconfirm --logfile ./pacman_update.log
 # scan prerequisites.txt for packages needed
 packagelist=""
 while read package; do
@@ -210,39 +210,86 @@ fi
 printf "\n\n"
 sleep 1
 
+
+
+# asking user if he's in X11 or not
+echo "Are you in X11 right now ? [Y|n]"
+read -n 1 x_11
+if [[ $x_11 == "n" ]];then
+	# he's not, ask him if he wants to be
+	printf "\n\n"
+	echo "This script can't generate colorscheme and wallpaper if X11 is not running."
+	echo "When X11 will be started, relaunch this script to finish setting things up."
+	printf "\n"
+	echo "Would you like to startx right now ? [Y|n]"
+	read -n 1 start_x
+	if [[ $start_x == "n" ]];then
+		printf "\n\n"
+		echo "X11 won't be launched."
+		echo "If you want to start one, just run startx."
+		printf "\n"
+		printf "(Almost) everything has been set up.\nThanks for using BDELPHIN's auto-rice script."
+		exit
+	else
+		echo "X11 will start in 5 seconds."
+		secs=5
+		while [ $secs -gt 0 ]; do
+			echo -ne "$secs\033[O\r"
+			sleep 1
+			: $((secs--))
+		done	
+		startx 2>&1 $HOME/.startx.log
+		exit
+	fi	
+fi
+
 # setting up wallpaper & colorscheme ##########################################
-printf "═══ Wallpaper & Colorscheme ═════════════════════════════════════════════\n"
-betterlockscreen -u ./Wallpapers/wallhaven-n6lqow.jpg
-wal -i ./Wallpapers/wallhaven-n6lqow.jpg -a 90 > ./pywal.log
-$HOME/.config/dunst/wal_dunst.sh 2>&1 > /dev/null
+printf "\n═══ Wallpaper & Colorscheme ═════════════════════════════════════════════\n"
+betterlockscreen -u ./Wallpapers/wallhaven-n6lqow.jpg 2>&1 $HOME/.betterlockscreen.log
+if [ $? -eq 0 ]; then
+	echo -e "Betterlockscreen setup: \e[38;5;82mOK.\e[0m"
+else
+	echo -e "Betterlockscreen setup: \e[38;5;196mFAIL.\e[0m"
+fi
+
+
+
+# TODO : ask user which transparency level he wants
+
+echo "Which transparency level do you want ?"
+transparency_level=110
+while [ "$transparency_level" -gt 100 -o "$transparency_level" -lt 1 ]
+do
+	echo "Input a number between 0 & 100, 100 being fully opaque."
+	read -r transparency_level
+done
+
+wal -i ./Wallpapers/wallhaven-n6lqow.jpg -a $transparency_level > ./pywal.log
 if [ $? -eq 0 ]; then
 	echo -e "Pywal setup: \e[38;5;82mOK.\e[0m"
+	$HOME/.config/dunst/wal_dunst.sh 2>&1 > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "Dunst colorscheme setup: \e[38;5;82mOK.\e[0m"
+	else
+		echo -e "Dunst colorscheme setup: \e[38;5;196mFAIL.\e[0m"
+	fi
 else
 	echo -e "Pywal setup: \e[38;5;196mFAIL.\e[0m"
+	echo -e "Dunst colorscheme setup: Skipping."
 fi
 
 # restart i3 ##################################################################
-# only if X detected, else inform to run startx.
-if [[ -t 0 && $(tty) =~ /dev/tty ]] && ! pgrep -u $USER startx &> /dev/null;then
-	echo "No X11 session detected, would you like to launch one ? [Y|n]"
-	read -n 1 start_x
-	if [[ $start_x == "n" ]];then
-		echo "X11 won't be launched."
-		echo "If you want to start one, just run startx."
-	else
-		startx 2>&1 $HOME/.startx.log
-	fi
-else
-	echo "i3-gaps will restart in 5 seconds."
-	secs=5
-	while [ $secs -gt 0 ]; do
-		echo -ne "$secs\033[O\r"
-		sleep 1
-		: $((secs--))
-	done
-	i3-msg restart	
-	printf "\n\n"notify-send "Welcome on board !" "Auto-ricing script is complete." -u normal
-fi
+echo "i3-gaps will restart in 5 seconds."
+secs=5
+while [ $secs -gt 0 ]; do
+	echo -ne "$secs\033[O\r"
+	sleep 1
+	: $((secs--))
+done
+i3-msg restart	
+printf "\n\n"
+notify-send "Welcome on board !" "Auto-ricing script is complete." -u normal
+printf "\n"
 echo "Everything has been set up. Thanks for using BDELPHIN's auto-rice script."
 
 
