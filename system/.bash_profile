@@ -8,7 +8,8 @@ if [[ -t 0 && $(tty) =~ /dev/tty ]] && ! pgrep -u $USER startx &> /dev/null;then
     if [[ $start_x == "n" ]];then
         echo "X11 won't be launched."
     else
-	startx 2>&1 $HOME/.startx.log
+#	startx 2>&1 $HOME/.startx.log
+	startx
     fi
 fi
 
