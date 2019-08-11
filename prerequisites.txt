@@ -4,7 +4,6 @@ compton
 dmenu
 dunst
 feh
-gotop
 grep
 htop
 i3-gaps
