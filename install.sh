@@ -264,7 +264,7 @@ do
 	read -r transparency_level
 done
 
-wal -i ./Wallpapers/wallhaven-n6lqow.jpg -a $transparency_level > ./pywal.log
+wal -i ./Wallpapers/wallhaven-p872we.jpg -a $transparency_level > ./pywal.log
 if [ $? -eq 0 ]; then
 	echo -e "Pywal setup: \e[38;5;82mOK.\e[0m"
 	$HOME/.config/dunst/wal_dunst.sh 2>&1 > /dev/null
