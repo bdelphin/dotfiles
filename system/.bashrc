@@ -12,6 +12,7 @@
 . "${HOME}/.cache/wal/colors.sh"
 alias dmen='dmenu_run -nb "$color0" -nf "$color7" -sb "$color2" -sf "$color7"'
 
+export bgpolybar_alpha="#BB${color0/'#'}"
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
