@@ -6,7 +6,7 @@ Xft.hintstyle: hintfull
 Xft.dpi:       100
 ! }}}
 
-URxvt*font: xft:GohuFont:style=regular:pixelsize=14, \
+URxvt*font: xft:Gohu GohuFont:style=regular:pixelsize=14, \
 	    xft:GohuFont:style=Regular:pixelsize=12, \
             xft:lucy tewi2a:style=Regular:pixelsize=12, \
             xft:NotoSansMono-Black:pixelsize=12, \
