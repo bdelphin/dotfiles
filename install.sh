@@ -74,6 +74,7 @@ mkdir -p ./backups/i3-gaps
 mkdir -p ./backups/polybar
 mkdir -p ./backups/system
 mkdir -p ./backups/dunst
+mkdir -p ./backups/compton
 
 # i3-gaps :
 if [ ! -f $HOME/.config/i3/config ]; then
@@ -96,6 +97,18 @@ else
 		echo -e "polybar config backup: \e[38;5;82mOK.\e[0m"
 	else
 		echo -e "polybar config backup: \e[38;5;196mFAIL.\e[0m"
+	fi
+fi
+
+# compton : 
+if [ ! -f $HOME/.config/compton.conf ]; then
+	echo "No custom compton config to backup. Skipping."
+else
+	cp $HOME/.config/compton.conf ./backups/compton/compton.conf.bak-$(date -Iseconds)
+	if [ $? -eq 0 ]; then
+		echo -e "compton custom config backup: \e[38;5;82mOK.\e[0m"
+	else
+		echo -e "compton custon config backup: \e[38;5;196mFAIL.\e[0m"
 	fi
 fi
 
