@@ -175,6 +175,12 @@ if [ $? -eq 0 ]; then
 else
 	echo -e "polybar config update: \e[38;5;196mFAIL.\e[0m"
 fi
+cp -R ./compton/* $HOME/.config/
+if [ $? -eq 0 ]; then
+	echo -e "compton config update: \e[38;5;82mOK.\e[0m"
+else
+	echo -e "compton config update: \e[38;5;196mFAIL.\e[0m"
+fi
 cp ./system/.Xresources $HOME/
 if [ $? -eq 0 ]; then
 	echo -e ".Xresources config update: \e[38;5;82mOK.\e[0m"
