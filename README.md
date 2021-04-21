@@ -1,5 +1,8 @@
 # BDELPHIN's desktop env. dotfiles repo
 
+## /!\ OLD STUFF, NOT UPDATED ANYMORE.
+My current dotfiles are here : https://github.com/bdelphin/dotfiles_v2
+
 This repository is the home for my DotFiles (config files, starting with a dot ".") for my Arch Linux "Desktop Environment". 
 
 But wait, there's more ! It comes with an auto install/ricing script !
